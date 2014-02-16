@@ -16,6 +16,15 @@
 
   `sack tough-to-find-line-of-code`
 
+
+## Credit
+
+  Original idea & implementation belong to @sampson-chen:
+  https://github.com/sampson-chen/sack.
+    
+  Rewritten for cleanliness in Ruby b/c Shell scripts past a certain
+  length are unweildy and tough to extend.
+
 ## Contributing
 
 1. Fork it ( http://github.com/<my-github-username>/rsack/fork )
