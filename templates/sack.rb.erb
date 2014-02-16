@@ -1,0 +1,4 @@
+<%= File.read(File.expand_path('templates/linux_load.erb')) %>
+<%= File.read(File.expand_path('lib/sack.rb')) %>
+
+Sack.search(ARGV.join(' '))

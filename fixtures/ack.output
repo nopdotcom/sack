@@ -1,0 +1,40 @@
+.emacs24.d/elisp/edit-server.el:189:Depending on the character encoding, may be different from the buffer length.")
+.emacs24.d/elisp/edit-server.el:228:Any of the following keys will close the buffer and send the text
+.emacs24.d/elisp/edit-server.el:241:send a response back to the client."
+.emacs24.d/elisp/edit-server.el:368:		(- edit-server-received (- (match-end 0) (point-min))))
+.emacs24.d/elisp/edit-server.el:370:	  (delete-region (point-min) (match-end 0))
+.emacs24.d/elisp/edit-server.el:385:	  ;; send 200 OK response to any other request
+.emacs24.d/elisp/edit-server.el:386:	  (edit-server-send-response proc "edit-server is running.\n" t)))
+.emacs24.d/elisp/edit-server.el:404:		   (fboundp 'x-send-client-message))
+.emacs24.d/elisp/edit-server.el:405:	  (x-send-client-message nil 0 nil
+.emacs24.d/elisp/edit-server.el:443:      ;; variables that we depend upon for the response, so call the
+.emacs24.d/elisp/edit-server.el:453:(defun edit-server-send-response (proc &optional body close)
+.emacs24.d/elisp/edit-server.el:454:  "Send an HTTP 200 OK response back to process PROC.
+.emacs24.d/elisp/edit-server.el:471:	(process-send-string proc response-header)
+.emacs24.d/elisp/edit-server.el:472:	(process-send-string proc "\n")
+.emacs24.d/elisp/edit-server.el:475:	  (process-send-string proc (encode-coding-string body 'utf-8)))
+.emacs24.d/elisp/edit-server.el:479:	  (process-send-region proc (point-min) (point-max))))
+.emacs24.d/elisp/edit-server.el:480:	(process-send-eof proc)
+.emacs24.d/elisp/edit-server.el:484:    (message "edit-server-send-response: invalid proc (bug?)")))
+.emacs24.d/elisp/edit-server.el:494:  "Finish editing: send HTTP response back, close client and editing buffers.
+.emacs24.d/elisp/edit-server.el:512:	  ;; send back original content
+.emacs24.d/elisp/edit-server.el:515:	    (edit-server-send-response proc t))
+.emacs24.d/elisp/edit-server.el:516:	;; send back edited content
+.emacs24.d/elisp/edit-server.el:523:	  ;; send back
+.emacs24.d/elisp/edit-server.el:525:	  (edit-server-send-response edit-server-proc t)
+.emacs24.d/elisp/edit-server.el:542:;;  a) Use the iterative edit-server option (send a buffer
+.emacs24.d/elisp/edit-server.el:562:  "Discard editing and send the original text back to the browser."
+.emacs24.d/elisp/edit-server.el:567:  "Discard editing and send the original text back to the browser,
+.emacs24.d/elisp/edit-server.el:574:;;; edit-server.el ends here
+.emacs24.d/elisp/lorem-ipsum.el:34:     "Donec hendrerit tempor tellus."
+.emacs24.d/elisp/lorem-ipsum.el:48:     "Suspendisse potenti."
+.emacs24.d/elisp/lorem-ipsum.el:64:     "Nunc eleifend leo vitae magna."
+.emacs24.d/elisp/lorem-ipsum.el:72:     "Etiam vel neque nec dui dignissim bibendum."
+.emacs24.d/elisp/lorem-ipsum.el:83:     "Sed bibendum."
+.emacs24.d/elisp/lorem-ipsum.el:86:     "Pellentesque condimentum, magna ut suscipit hendrerit, ipsum augue ornare nulla, non luctus diam neque sit amet urna."
+.emacs24.d/elisp/lorem-ipsum.el:97:(defvar Lorem-ipsum-list-item-end "\n")
+.emacs24.d/elisp/lorem-ipsum.el:98:(defvar Lorem-ipsum-list-end "")
+.emacs24.d/elisp/lorem-ipsum.el:104:(make-variable-buffer-local 'Lorem-ipsum-list-item-end)
+.emacs24.d/elisp/lorem-ipsum.el:105:(make-variable-buffer-local 'Lorem-ipsum-list-end)
+.emacs24.d/elisp/lorem-ipsum.el:112:				  Lorem-ipsum-list-item-end "</li>\n"
+.emacs24.d/elisp/lorem-ipsum.el:113:				  Lorem-ipsum-list-end "</ul>\n")))
