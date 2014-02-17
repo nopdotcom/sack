@@ -39,7 +39,7 @@ module Sack
     klass = choose_best_search_tool
     lines = klass.new(search_term).lines
     transformer = Transformer.new(lines)
-    output = transformer.for_color_printing
+    output = transformer.for_color_printing(search_term)
     STDOUT.puts output
     File.write(File.expand_path("~/.sack_shortcuts"), transformer.shortcut_syntax)
   end
@@ -117,7 +117,7 @@ module Sack
     def initialize(line)
       @line = line
       parts = split(line)
-      @filename = File.expand_path(parts[:filename])
+      @filename = [Dir.pwd, parts[:filename]].join(File::SEPARATOR)
       @line_number = parts[:line_number]
       @description = parts[:description]
 
@@ -140,7 +140,7 @@ module Sack
       @unique_files ||= @lines.map(&:filename).uniq
     end
 
-    def for_color_printing
+    def for_color_printing(search_term)
       @result = []
       @count = 1
       unique_files.each do |file|
