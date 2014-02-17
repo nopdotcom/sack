@@ -38,6 +38,7 @@ exec /usr/bin/env ruby --disable-gems -x "$0" $*
 #  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ###
+###
 # Ruby replacement for F, which is a ~/bin/F for github.com/zph/sack
 # Sack was created by another author and forked zander@civet.ws
 def main
@@ -46,17 +47,18 @@ def main
   case args.count
   when 0
     sack_shortcut = read_specific_line(0)
-    system "$EDITOR +#{sack_shortcut}"
+    exec "$EDITOR +#{sack_shortcut}"
   when 1
-    shortcut_index = args.first.to_i - 1
+    shortcut_index = convert_to_zero_index(args.first)
     sack_shortcut = read_specific_line(shortcut_index)
     puts sack_shortcut
     exec "$EDITOR +#{sack_shortcut}"
   else
     vim_commands = args.map.with_index do |value, index|
-      current_sack = read_specific_line(index + 1)
+      current_sack = read_specific_line(convert_to_zero_index(index))
       line_no = current_sack.split[0]
       filename = current_sack.split[1]
+      puts sack_shortcut
       command = [
       "-c ",
       "'tabe +#{line_no} #{filename}'"
@@ -69,6 +71,10 @@ def main
 rescue => e
   raise e, "Something went wrong"
   exit 1
+end
+
+def convert_to_zero_index(input)
+  input.to_i - 1
 end
 
 def read_specific_line(line_number)
