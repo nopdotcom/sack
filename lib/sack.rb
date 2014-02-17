@@ -39,9 +39,7 @@ module Sack
     klass = choose_best_search_tool
     lines = klass.new(search_term).lines
     transformer = Transformer.new(lines)
-    output = transformer.for_color_printing.gsub(/#{search_term}/) do |match|
-      match.send(:red)
-    end
+    output = transformer.for_color_printing
     STDOUT.puts output
     File.write(File.expand_path("~/.sack_shortcuts"), transformer.shortcut_syntax)
   end
@@ -148,7 +146,13 @@ module Sack
       unique_files.each do |file|
         @result << "#{file}\n".green
         @result << @lines.select { |i| i.filename == file}.map do |l|
-          row = ["   ", "[#{@count}]".blue.bold, l.line_number.rjust(3), ":", l.description[0..199], "\n"].join(' ')
+          description = l.description[0..199].gsub(/#{search_term}/) do |match|
+            match.send(:red)
+          end
+
+          line_number = l.line_number.rjust(3)
+          count = "[#{@count}]".blue.bold
+          row = ["   ", count, line_number, ":", description, "\n"].join(' ')
           @count += 1
           row
         end
