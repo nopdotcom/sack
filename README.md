@@ -9,6 +9,10 @@
 
 ## Installation
 
+  `curl -L https://raw.github.com/zph/sack/master/install.sh | bash -s`
+
+  It will install two files into `~/bin`. One is `sack` the search util and the other is the complimentary `F` which will allow you to instantly edit those files with Vim.
+
   Sack is unixy, just copy the bin into your $PATH
   To compile a new copy of it: `rake compile`
 
