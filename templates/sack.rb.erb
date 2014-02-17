@@ -1,4 +1,12 @@
 <%= File.read(File.expand_path('templates/linux_load.erb')) %>
+###
+<%=
+    File.read(File.expand_path('LICENSE.txt')).split("\n").map do |line|
+      line.insert(0, "#  ")
+    end.join("\n")
+%>
+
+###
 <%= File.read(File.expand_path('lib/sack.rb')) %>
 
 Sack.search(ARGV.join(' '))
