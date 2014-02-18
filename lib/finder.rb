@@ -1,43 +1,3 @@
-#!/usr/bin/env bash
-# vim: set ft=ruby:
-
-# This file executes as a bash script, which turns around and executes Ruby via
-# the line below. The -x argument to Ruby makes it discard everything before
-# the second "!ruby" shebang. This allows us to work on Linux, where the
-# shebang can only have one argument so we can't directly say
-# "#!/usr/bin/env ruby --disable-gems". Thanks for that, Linux.
-#
-# If this seems confusing, don't worry. You can treat it as a normal Ruby file
-# starting with the "!ruby" shebang below.
-# Credit for Ruby loading trick belongs to Gary Bernhardt.
-
-exec /usr/bin/env ruby --disable-gems -x "$0" $*
-#!ruby
-
-###
-#  Copyright (c) 2014 Zander Hill
-#  
-#  MIT License
-#  
-#  Permission is hereby granted, free of charge, to any person obtaining
-#  a copy of this software and associated documentation files (the
-#  "Software"), to deal in the Software without restriction, including
-#  without limitation the rights to use, copy, modify, merge, publish,
-#  distribute, sublicense, and/or sell copies of the Software, and to
-#  permit persons to whom the Software is furnished to do so, subject to
-#  the following conditions:
-#  
-#  The above copyright notice and this permission notice shall be
-#  included in all copies or substantial portions of the Software.
-#  
-#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-#  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-#  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-#  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-#  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-#  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-#  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-###
 ###
 # Ruby replacement for F, which is a ~/bin/F for github.com/zph/sack
 # Sack was created by another author and forked zander@civet.ws
@@ -102,8 +62,4 @@ module Sack
     CLI.new().debug?
   end
 end
-
-
-
-Sack::CLI.new(input: ARGV).main
 
