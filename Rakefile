@@ -1,4 +1,5 @@
 require "bundler/gem_tasks"
+require 'fileutils'
 
 require 'repl_rake'
 ReplRake.setup
@@ -12,6 +13,13 @@ end
 
 task :sack do
   compile_to_bin("sack.rb")
+end
+
+task :compile_install => :compile do
+  files = Dir["bin/*"]
+  files.each do |file|
+    FileUtils.install(file, File.expand_path("~/bin/"))
+  end
 end
 
 def compile_to_bin(filename)
