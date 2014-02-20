@@ -1,36 +1,5 @@
 require 'open3'
 
-class String
-  ENCODING_OPTS = {invalid: :replace, undef: :replace, replace: '', universal_newline: true}
-  def remove_non_ascii
-    self.encode(Encoding.find('ASCII'), ENCODING_OPTS)
-  end
-
-  def colorize(color_code)
-    "\e[#{color_code}m#{self}\e[0m"
-  end
-
-  def black;          colorize(30) end
-  def red;            colorize(31) end
-  def green;          colorize(32) end
-  def brown;          colorize(33) end
-  def blue;           colorize(34) end
-  def magenta;        colorize(35) end
-  def cyan;           colorize(36) end
-  def gray;           colorize(37) end
-  def bg_black;       colorize(40) end
-  def bg_red;         colorize(41) end
-  def bg_green;       colorize(42) end
-  def bg_brown;       colorize(43) end
-  def bg_blue;        colorize(44) end
-  def bg_magenta;     colorize(45) end
-  def bg_cyan;        colorize(46) end
-  def bg_gray;        colorize(47) end
-  def bold;           colorize(1) end
-  def reverse_color;  colorize(7) end
-end
-
-
 module Sack
   VERSION = "0.1.0"
   HIGHLIGHT_MATCH_COLOR = :red
@@ -55,6 +24,51 @@ module Sack
   def self.available?(name)
     _, status = Open3.capture2("which #{name}")
     status.exitstatus == 0
+  end
+
+  class Stdin
+    attr_accessor :lines
+    def self.search(io)
+      std = new(io.dup)
+      trace = Sack::Stack::Parser.new(std.lines).ruby_trace
+      output = Sack::Transformer.new(trace).shortcut_syntax
+      STDOUT.puts output
+      File.write(File.expand_path("~/.sack_shortcuts"), output)
+    end
+
+    def initialize(io)
+      @lines = io
+    end
+  end
+
+  module Stack
+    class Parser
+      attr_accessor :lines
+      def initialize(lines)
+        @lines = lines
+      end
+
+      def ruby_trace
+        @ruby_stack ||= @lines.map do |line|
+          Line.new(line)
+        end
+      end
+    end
+
+    class Line
+      attr_accessor :line, :filename, :line_number
+      def initialize(line)
+        @line = line
+        parts = split(line)
+        @filename = parts[:filename]
+        @line_number = parts[:line_number]
+        # @description = parts[:description]
+      end
+
+      def split(line)
+        line.match(%r{((?<filename>/.*/.*):(?<line_number>\d+)):})
+      end
+    end
   end
 
   class Search
@@ -108,10 +122,9 @@ module Sack
     def initialize(content)
       file = File.new(Dir["ack.formatted"].first)
       @line = file.readlines[1]
-      # @content = content.split("\n")
-
     end
   end
+
   class Line
     attr_accessor :line, :filename, :line_number, :description
     def initialize(line)
@@ -167,5 +180,35 @@ module Sack
       end.join
     end
   end
-
 end
+
+class String
+  ENCODING_OPTS = {invalid: :replace, undef: :replace, replace: '', universal_newline: true}
+  def remove_non_ascii
+    self.encode(Encoding.find('ASCII'), ENCODING_OPTS)
+  end
+
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+  def black;          colorize(30) end
+  def red;            colorize(31) end
+  def green;          colorize(32) end
+  def brown;          colorize(33) end
+  def blue;           colorize(34) end
+  def magenta;        colorize(35) end
+  def cyan;           colorize(36) end
+  def gray;           colorize(37) end
+  def bg_black;       colorize(40) end
+  def bg_red;         colorize(41) end
+  def bg_green;       colorize(42) end
+  def bg_brown;       colorize(43) end
+  def bg_blue;        colorize(44) end
+  def bg_magenta;     colorize(45) end
+  def bg_cyan;        colorize(46) end
+  def bg_gray;        colorize(47) end
+  def bold;           colorize(1) end
+  def reverse_color;  colorize(7) end
+end
+

@@ -6,5 +6,5 @@ gem 'minitest'
 gem 'dotenv'
 gem 'mocha'
 
-# Specify your gem's dependencies in rsack.gemspec
+# Specify your gem's dependencies in sack.gemspec
 gemspec

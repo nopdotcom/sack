@@ -9,4 +9,17 @@
 ###
 <%= File.read(File.expand_path('lib/sack.rb')) %>
 
-Sack.search(ARGV.join(' '))
+if ARGV.count > 0
+  # Seems like it's search time
+  Sack.search(ARGV.join(' '))
+else
+  # Let's parse STDIN
+  @lines = []
+  while input = ARGF.gets
+    input.each_line do |line|
+      @lines << line.chomp
+    end
+  end
+
+  Sack::Stdin.search(@lines)
+end
