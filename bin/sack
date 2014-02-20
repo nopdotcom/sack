@@ -16,9 +16,9 @@ exec /usr/bin/env ruby --disable-gems -x "$0" $*
 
 ###
 #  Copyright (c) 2014 Zander Hill
-#
+#  
 #  MIT License
-#
+#  
 #  Permission is hereby granted, free of charge, to any person obtaining
 #  a copy of this software and associated documentation files (the
 #  "Software"), to deal in the Software without restriction, including
@@ -26,10 +26,10 @@ exec /usr/bin/env ruby --disable-gems -x "$0" $*
 #  distribute, sublicense, and/or sell copies of the Software, and to
 #  permit persons to whom the Software is furnished to do so, subject to
 #  the following conditions:
-#
+#  
 #  The above copyright notice and this permission notice shall be
 #  included in all copies or substantial portions of the Software.
-#
+#  
 #  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 #  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 #  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -74,6 +74,7 @@ module Sack
       trace = Sack::Stack::Parser.new(std.lines).ruby_trace
       output = Sack::Transformer.new(trace).shortcut_syntax
       STDOUT.puts output
+      File.write(File.expand_path("~/.sack_shortcuts"), output)
     end
 
     def initialize(io)
@@ -255,8 +256,10 @@ end
 
 
 if ARGV.count > 0
+  # Seems like it's search time
   Sack.search(ARGV.join(' '))
 else
+  # Let's parse STDIN
   @lines = []
   while input = ARGF.gets
     input.each_line do |line|
