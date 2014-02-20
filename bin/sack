@@ -72,8 +72,10 @@ module Sack
     def self.search(io)
       std = new(io.dup)
       trace = Sack::Stack::Parser.new(std.lines).ruby_trace
-      output = Sack::Transformer.new(trace).shortcut_syntax
-      STDOUT.puts output
+      transformer = Sack::Transformer.new(trace)
+      output = transformer.shortcut_syntax
+      color_output = transformer.for_color_printing
+      STDOUT.puts color_output
       File.write(File.expand_path("~/.sack_shortcuts"), output)
     end
 
@@ -194,19 +196,25 @@ module Sack
       @unique_files ||= @lines.map(&:filename).uniq
     end
 
-    def for_color_printing(search_term)
+    def for_color_printing(search_term = '')
       @result = []
       @count = 1
       unique_files.each do |file|
         @result << "#{file}\n".green
         @result << @lines.select { |i| i.filename == file}.map do |l|
-          description = l.description[0..199].gsub(/#{search_term}/) do |match|
-            match.send(:red)
-          end
 
           line_number = l.line_number.rjust(3)
           count = "[#{@count}]".blue.bold
-          row = ["   ", count, line_number, ":", description, "\n"].join(' ')
+
+          if l.respond_to?(:description)
+            description = l.description[0..199].gsub(/#{search_term}/) do |match|
+              match.send(:red)
+            end
+            row = ["   ", count, line_number, ":", String(description), "\n"].compact.join(' ')
+          else
+            row = ["   ", count, line_number, file, "\n"].compact.join(' ')
+          end
+
           @count += 1
           row
         end
