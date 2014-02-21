@@ -11,7 +11,7 @@
 # starting with the "!ruby" shebang below.
 # Credit for Ruby loading trick belongs to Gary Bernhardt.
 
-exec /usr/bin/env ruby --disable-gems -x "$0" $*
+exec /usr/bin/ruby --disable-gems -x "$0" $*
 #!ruby
 
 ###
@@ -49,8 +49,12 @@ module Sack
     klass = choose_best_search_tool
     lines = klass.new(search_term).lines
     transformer = Transformer.new(lines)
-    output = transformer.for_color_printing(search_term)
-    STDOUT.puts output
+    color_output = transformer.for_color_printing(search_term)
+      begin
+        STDOUT.puts color_output
+      rescue Errno::EPIPE
+        exit(74)
+      end
     File.write(File.expand_path("~/.sack_shortcuts"), transformer.shortcut_syntax)
   end
 
@@ -75,7 +79,11 @@ module Sack
       transformer = Sack::Transformer.new(trace)
       output = transformer.shortcut_syntax
       color_output = transformer.for_color_printing
-      STDOUT.puts color_output
+      begin
+        STDOUT.puts color_output
+      rescue Errno::EPIPE
+        exit(74)
+      end
       File.write(File.expand_path("~/.sack_shortcuts"), output)
     end
 
@@ -92,8 +100,11 @@ module Sack
       end
 
       def ruby_trace
-        @ruby_stack ||= @lines.map do |line|
-          Line.new(line)
+        begin
+          @ruby_stack ||= @lines.map do |line|
+            Line.new(line)
+          end
+        rescue
         end
       end
     end
@@ -180,9 +191,9 @@ module Sack
     end
 
     def split(line)
-      line.match(%r{^(?<filename>.+)
-                    :(?<line_number>\d+)
-                    :(?<description>.*)$}x)
+      os = {}
+      os[:filename], os[:line_number], os[:description] = line.split(':', 3)
+      os
     end
 
   end
