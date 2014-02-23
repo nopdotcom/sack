@@ -1,7 +1,7 @@
 require 'open3'
 
 module Sack
-  VERSION = "0.1.0"
+  VERSION = "0.2.0"
   HIGHLIGHT_MATCH_COLOR = :red
 
   def self.search(search_term)
@@ -35,6 +35,7 @@ module Sack
     def self.search(io)
       std = new(io.dup)
       trace = Sack::Stack::Parser.new(std.lines).ruby_trace
+      exit(1) if trace.empty?
       transformer = Sack::Transformer.new(trace)
       output = transformer.shortcut_syntax
       color_output = transformer.for_color_printing
@@ -65,6 +66,8 @@ module Sack
           end
         rescue
         end
+
+        Array(@ruby_stack)
       end
     end
 

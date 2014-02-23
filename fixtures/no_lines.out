@@ -1,0 +1,48 @@
+t was installed into ./vendor
+mbp:sack be rake compile_install                                                        (master)
+mbp:sack g cim "Update bin"                                                          (●)(master)
+# On branch master
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#	modified:   bin/sack
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+mbp:sack gap bin/sack                                                             1 ±(●)(master)
+diff --git a/bin/sack b/bin/sack
+index d400756..c2a1f5c 100755
+--- a/bin/sack
++++ b/bin/sack
+@@ -133,7 +133,13 @@ module Sack
+     end
+
+     def collect_lines(input)
+-      input.map { |i| Line.new(i) }
++      input.map do |i|
++        begin
++          Line.new(i)
++        rescue
++          next
++        end
++      end
+     end
+
+     def command
+Stage this hunk [y,n,q,a,d,/,e,?]? y
+
+mbp:sack g cim "Update bin"                                                          (●)(master)
+[master f56fc22] Update bin
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+mbp:sack gpu                                                                        (A1)(master)
+Counting objects: 7, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 403 bytes, done.
+Total 4 (delta 2), reused 0 (delta 0)
+To git@github.com:zph/sack
+   e017cf3..f56fc22  master -> master
+mbp:sack pbpaste > ~/tmp/file.log                                                       (master)
+mbp:sack vim !$                                                                         (master)
+vim ~/tmp/file.log
+mbp:sack tmux attach
