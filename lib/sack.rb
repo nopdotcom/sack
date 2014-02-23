@@ -92,7 +92,13 @@ module Sack
     end
 
     def collect_lines(input)
-      input.map { |i| Line.new(i) }
+      input.map do |i|
+        begin
+          Line.new(i)
+        rescue
+          next
+        end
+      end
     end
 
     def command
