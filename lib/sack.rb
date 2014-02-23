@@ -1,7 +1,7 @@
 require 'open3'
 
 module Sack
-  VERSION = "0.2.0"
+  VERSION = "0.2.1"
   HIGHLIGHT_MATCH_COLOR = :red
   SHORTCUTS_FILE = ENV.fetch('SACK_SHORTCUTS') { File.expand_path("~/.sack_shortcuts") }
 
@@ -61,12 +61,14 @@ module Sack
       end
 
       def ruby_trace
-        begin
-          @ruby_stack ||= @lines.map do |line|
+        @ruby_stack ||= @lines.map do |line|
+          begin
             Line.new(line)
+          rescue
+            # rescue bad lines
+            next
           end
-        rescue
-        end
+        end.compact
 
         Array(@ruby_stack)
       end
