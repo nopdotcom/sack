@@ -44,6 +44,7 @@ require 'open3'
 module Sack
   VERSION = "0.2.0"
   HIGHLIGHT_MATCH_COLOR = :red
+  SHORTCUTS_FILE = ENV.fetch('SACK_SHORTCUTS') { File.expand_path("~/.sack_shortcuts") }
 
   def self.search(search_term)
     klass = choose_best_search_tool
@@ -55,7 +56,7 @@ module Sack
       rescue Errno::EPIPE
         exit(74)
       end
-    File.write(File.expand_path("~/.sack_shortcuts"), transformer.shortcut_syntax)
+    File.write(SHORTCUTS_FILE, transformer.shortcut_syntax)
   end
 
   def self.choose_best_search_tool
@@ -85,7 +86,7 @@ module Sack
       rescue Errno::EPIPE
         exit(74)
       end
-      File.write(File.expand_path("~/.sack_shortcuts"), output)
+      File.write(SHORTCUTS_FILE, output)
     end
 
     def initialize(io)
