@@ -75,12 +75,13 @@ module Sack
     end
 
     class Line
-      attr_accessor :line, :filename, :line_number
+      attr_accessor :line, :filename, :line_number, :match_index
       def initialize(line)
         @line = line
         parts = split(line)
         @filename = parts[:filename]
         @line_number = parts[:line_number]
+        @match_index = 0
         # @description = parts[:description]
       end
 
@@ -100,7 +101,7 @@ module Sack
     def collect_lines(input)
       input.map do |i|
         begin
-          Line.new(i)
+          Line.new(i, search_term)
         rescue
           next
         end
@@ -151,14 +152,14 @@ module Sack
   end
 
   class Line
-    attr_accessor :line, :filename, :line_number, :description
-    def initialize(line)
+    attr_accessor :line, :filename, :line_number, :description, :match_index
+    def initialize(line, search_term)
       @line = line
       parts = split(line)
       @filename = [Dir.pwd, parts[:filename]].join(File::SEPARATOR)
       @line_number = parts[:line_number]
       @description = parts[:description]
-
+      @match_index = @description.index(%r{#{search_term}}) || 0
     end
 
     def split(line)
@@ -207,7 +208,10 @@ module Sack
 
     def shortcut_syntax
       @lines.map do |l|
-        [l.line_number, l.filename].join(' ') + "\n"
+
+        index_of_item = ( l.match_index + 1 ).to_s
+        middle_portion = [l.line_number, 'col', index_of_item].join(' ')
+        [l.filename, middle_portion, l.description].join('|') + "\n"
       end.join
     end
   end
