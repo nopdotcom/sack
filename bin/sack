@@ -42,7 +42,7 @@ exec /usr/bin/ruby --disable-gems -x "$0" $*
 require 'open3'
 
 module Sack
-  VERSION = "0.2.1"
+  VERSION = "0.3.0"
   HIGHLIGHT_MATCH_COLOR = :red
   SHORTCUTS_FILE = ENV.fetch('SACK_SHORTCUTS') { File.expand_path("~/.sack_shortcuts") }
 
@@ -249,10 +249,10 @@ module Sack
 
     def shortcut_syntax
       @lines.map do |l|
-
+        filename = l.filename.gsub(/#{ENV['HOME']}/, '~')
         index_of_item = ( l.match_index + 1 ).to_s
         middle_portion = [l.line_number, 'col', index_of_item].join(' ')
-        [l.filename, middle_portion, l.description].join('|') + "\n"
+        [filename, middle_portion, l.description].join('|') + "\n"
       end.join
     end
   end

@@ -208,10 +208,10 @@ module Sack
 
     def shortcut_syntax
       @lines.map do |l|
-
+        filename = l.filename.gsub(/#{ENV['HOME']}/, '~')
         index_of_item = ( l.match_index + 1 ).to_s
         middle_portion = [l.line_number, 'col', index_of_item].join(' ')
-        [l.filename, middle_portion, l.description].join('|') + "\n"
+        [filename, middle_portion, l.description].join('|') + "\n"
       end.join
     end
   end
