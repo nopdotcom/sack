@@ -75,18 +75,18 @@ module Sack
     end
 
     class Line
-      attr_accessor :line, :filename, :line_number, :match_index
+      attr_accessor :line, :filename, :line_number, :match_index, :description
       def initialize(line)
         @line = line
         parts = split(line)
         @filename = parts[:filename]
         @line_number = parts[:line_number]
         @match_index = 0
-        # @description = parts[:description]
+        @description = parts[:description]
       end
 
       def split(line)
-        line.match(%r{((?<filename>/.*/.*):(?<line_number>\d+)):})
+        line.match(%r{((?<filename>/.*/.*):(?<line_number>\d+)):(?<description>.*)$})
       end
     end
   end
