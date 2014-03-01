@@ -11,17 +11,31 @@ module Sack
       @shortcut_file = params.fetch(:shortcut_file) { "~/.sack_shortcuts" }
     end
 
+    def parse_line(line)
+      # Sample line
+      #  %q{/elisp/edit-server.el|189 col 1|Depending on the character encoding, may be different from the buffer length.")}
+      filename, middle, description = line.split('|', 3)
+      line_number, _col, index_position = middle.split(' ')
+      {filename: filename, line_no: line_number}
+    end
+
     def edit_single_file(index)
-      sack_shortcut = read_specific_line(index)
-      output.puts sack_shortcut
-      exec( "$EDITOR +#{sack_shortcut}" ) unless debug?
+      s = parse_line(read_specific_line(index))
+      vim_cmd = vim_line_no_and_filename(s)
+      output.puts vim_cmd
+      exec( "$EDITOR #{vim_cmd}" ) unless debug?
+    end
+
+    def vim_line_no_and_filename(h)
+      "+#{h[:line_no]} #{h[:filename]}"
     end
 
     def build_multiple_edit_commands(value)
       sack_shortcut = read_specific_line(value.to_i)
-      line_no, filename = sack_shortcut.split(' ', 2)
-      output.puts sack_shortcut
-      command = [ "-c", "'tabe +#{line_no} #{filename}'" ].join(' ')
+      s = parse_line(read_specific_line(value.to_i))
+      vim_cmd = vim_line_no_and_filename(s)
+      output.puts vim_cmd
+      command = [ "-c", "'tabe #{vim_cmd}'" ].join(' ')
     end
 
     def main(args=args)
