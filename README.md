@@ -20,6 +20,12 @@
 
   `sack tough-to-find-line-of-code`
 
+## Compatibility
+
+  We try to follow semver for this project.  Ie large breaking changes will, hopefully, only occur with major releases, ie 1.0.0 to 2.0.0.
+
+  While the versions are < 1.0.0 there are no rules for this project and our only contract with users is that versions will increase consistently rather than going all cattywhompus (ie 0.0.1 -> 2.0.0 -> 1.5.5).  It'll always be onward & upward.
+
 
 ## Credit
 

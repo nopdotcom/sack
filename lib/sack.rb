@@ -1,7 +1,7 @@
 require 'open3'
 
 module Sack
-  VERSION = "0.2.1"
+  VERSION = "0.3.0"
   HIGHLIGHT_MATCH_COLOR = :red
   SHORTCUTS_FILE = ENV.fetch('SACK_SHORTCUTS') { File.expand_path("~/.sack_shortcuts") }
 
