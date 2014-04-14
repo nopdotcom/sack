@@ -190,7 +190,7 @@ module Sack
           count = "[#{@count}]".blue.bold
 
           if l.respond_to?(:description)
-            description = l.description[0..199].gsub(/#{search_term}/) do |match|
+            description = l.description[0..199].gsub(/#{search_term}/i) do |match|
               match.send(:red)
             end
             row = ["   ", count, line_number, ":", String(description), "\n"].compact.join(' ')
